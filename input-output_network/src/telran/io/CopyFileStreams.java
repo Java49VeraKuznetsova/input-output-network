@@ -1,35 +1,27 @@
 package telran.io;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import java.io.*;
 
 public class CopyFileStreams implements CopyFile {
-private static int bufferLenght;
-
-public CopyFileStreams(int bufferLenght) {
+private final int bufferLength;
+	public CopyFileStreams(int bufferLength) {
 	super();
-	CopyFileStreams.bufferLenght = bufferLenght;
+	this.bufferLength = bufferLength;
 }
-
-
-public static void copy (String pathToSourse, String pathToDestination) throws Exception{
-	System.out.println("Hi");
-	try (
-			InputStream input = new FileInputStream(pathToSourse);
-			OutputStream output = new FileOutputStream(pathToDestination))
-			 {
-		byte buf[] = new byte[bufferLenght];
-		
-		int lenght = 0;
-		while((lenght = input.read(buf)) > 0) {
-			output.write(buf, 0, lenght);
-					}
+	@Override
+	public void copy(String pathToSource, String pathToDestination){
+		try(FileInputStream input = new FileInputStream(pathToSource);
+				FileOutputStream output = new FileOutputStream(pathToDestination)) {
+			int length = 0;
+			byte[] buffer = new byte[bufferLength];
+			while((length = input.read(buffer)) > 0) {
+				output.write(buffer, 0, length);
 			}
-	
-}
+			
+		}catch (IOException e) {
+			throw new RuntimeException(e.toString());
+		}
 
+	}
 
 }

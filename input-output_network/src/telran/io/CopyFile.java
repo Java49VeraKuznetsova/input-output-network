@@ -1,7 +1,5 @@
 package telran.io;
 
 public interface CopyFile {
-public static void copy (String pathToSourse, String pathToDestination ) {
-
-}
+void copy(String pathToSource, String pathToDestination);
 }
