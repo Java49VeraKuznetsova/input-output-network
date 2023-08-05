@@ -33,9 +33,7 @@ public class TextCommentSeparation {
 					}
 				});
 						
-				outputLine.close();
-				outputComment.close();
-				
+					
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
