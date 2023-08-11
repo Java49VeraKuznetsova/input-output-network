@@ -1,5 +1,6 @@
 package telran.employees.test;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -123,5 +124,83 @@ class CompanyTest {
 	void testSave() {
 		company.save(TEST_DATA);
 	}
+	
+	@Test
+	void testGetEmployeesBySalary() {
+		
+		Employee [] expected1 = {empl1, empl2, empl3, empl4};
+		Employee [] expected = {empl2, empl4, empl1, empl3};
+		assertArrayEquals(expected,
+				company.getEmployeesBySalary(3000, 12000)
+				.toArray(Employee[]::new));
+		Employee [] actual = company
+				      .getEmployeesBySalary(3000, 12000)
+				      .stream()
+				      .sorted((empl1, empl2) ->
+				      Long.compare (empl1.id(), empl2.id()))
+				      .toArray(Employee []::new);
+	assertArrayEquals (expected1, actual);
+	Employee [] expected3 = {empl5};
+	Employee [] expected4 = {};
+	assertArrayEquals (expected3,
+			company.getEmployeesBySalary(12000, 50000)
+			.toArray(Employee[]::new));
+	assertArrayEquals (expected4,
+			company.getEmployeesBySalary(1, 3000)
+			.toArray(Employee[]::new));	
+	
+	}
 
+
+
+@Test 
+void testGetEmployeesByDepartment() {
+	
+	Employee [] expected2 = {empl1, empl3};
+	Employee [] expected3 = {empl5};
+	String department = "dep4";
+		
+
+	assertThrowsExactly (NullPointerException.class,
+			() ->
+			company.getEmployeesByDepartment(department));
+	
+	assertArrayEquals (expected2,
+			company
+			.getEmployeesByDepartment(DEP1)
+			.toArray(Employee [] :: new));
+	assertArrayEquals (expected3,
+			company
+			.getEmployeesByDepartment(DEP3)
+			.toArray(Employee [] :: new));
+	
+}
+
+@Test
+void testGetEmployeesByAge() {
+	Employee [] expected1 = {};
+	Employee [] expected2 = {empl2, empl4};
+	Employee [] expected3 = {empl5};
+	
+	assertArrayEquals(expected1, 
+			company
+			.getEmployeesByAge(40, 50)
+	.toArray(Employee[] :: new));
+	assertArrayEquals(expected1, 
+			company
+			.getEmployeesByAge(5, 10)
+	.toArray(Employee[] :: new));
+	
+	assertArrayEquals(expected2, 
+			company
+			.getEmployeesByAge(32, 40)
+	.toArray(Employee[] :: new));
+	
+		
+	assertArrayEquals(expected3, 
+			company
+			.getEmployeesByAge(0, 20)
+	.toArray(Employee[] :: new));
+	
+}
 }

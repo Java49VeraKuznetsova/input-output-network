@@ -51,6 +51,7 @@ public class CompanyImpl implements Company {
 	private int getAge(LocalDate dateBirth) {
 		// TODO Auto-generated method stub
 		final LocalDate today = LocalDate.now();
+	
 		return Period.between(dateBirth, today).getYears();
 	}
 
@@ -148,10 +149,14 @@ public class CompanyImpl implements Company {
 	public List<Employee> getEmployeesByDepartment(String department) {
 		// TODO Auto-generated method stub
 		
+			if (employeesDepartment.get(department) == null) {
+			
+				throw new NullPointerException("now such department");
+							
+		} 
 		return employeesDepartment
 				.get(department)
 				.stream()
-			
 				.sorted((empl1, empl2) ->
 				Long.compare(empl1.id(), empl2.id()))
 						
@@ -175,7 +180,7 @@ public class CompanyImpl implements Company {
 	@Override
 	public List<Employee> getEmployeesByAge(int ageFrom, int ageTo) {
 		// TODO Auto-generated method stub
-		return employeesSalary
+		return employeesAge
 				.subMap(ageFrom, true, ageTo, true)
 				.values()
 				.stream()
@@ -188,6 +193,7 @@ public class CompanyImpl implements Company {
 	@Override
 	public Employee updateSalary(long id, int newSalary) {
 		// TODO Auto-generated method stub
+	
 		
 		return null;
 	}
