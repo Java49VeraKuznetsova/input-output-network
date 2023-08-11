@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -232,6 +233,36 @@ void testGetEmployeesByAge() {
 			company
 			.getEmployeesByAge(0, 20)
 	.toArray(Employee[] :: new));
+	
+}
+
+@Test
+void testUpdateDepartment () {
+	company.updateDepartment(ID5, DEP1);
+	Employee [] expected1 = {};
+	Employee emplNew = new Employee(ID5, "name", DEP1, SALARY3, DATE3);
+	Employee [] expected2 = {empl1, empl3, emplNew};
+	assertArrayEquals(expected2,
+			company.getEmployeesByDepartment(DEP1)
+						.toArray(Employee[]::new));
+			
+	assertThrowsExactly (NullPointerException.class,
+			() ->
+			company.getEmployeesByDepartment(DEP3));
+}
+
+@Test
+void testUpdateSalary () {
+	company.updateSalary(ID5, SALARY1);
+	Employee [] expected1 = {};
+	Employee emplNew = new Employee (ID5, "name", DEP3, SALARY1, DATE3);
+	Employee [] expected2 = {empl1, empl3, emplNew};
+	assertArrayEquals(expected2,
+			company.getEmployeesBySalary(SALARY1, 11000)
+						.toArray(Employee[]::new));
+	assertArrayEquals(expected1,
+			company.getEmployeesBySalary(15000, 16000)
+						.toArray(Employee[]::new));
 	
 }
 }

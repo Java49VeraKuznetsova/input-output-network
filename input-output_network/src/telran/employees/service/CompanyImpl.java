@@ -45,7 +45,7 @@ public class CompanyImpl implements Company {
 		employeesAge
 		.computeIfAbsent(age, k -> new HashSet<>())
 		.add(empl);
-	
+
 }
 
 	private int getAge(LocalDate dateBirth) {
@@ -194,14 +194,36 @@ public class CompanyImpl implements Company {
 	public Employee updateSalary(long id, int newSalary) {
 		// TODO Auto-generated method stub
 	
-		
-		return null;
+		Employee empl = employees.get(id);
+		if (empl != null && empl.salary() != newSalary) {
+			removeEmployee(id);
+			Employee newEmpl =
+            new Employee(empl.id(), empl.name(), empl.department(), 
+            		newSalary, empl.birthDate());
+			addEmployee(newEmpl);
+						
+		} else {
+			empl= null;
+		}
+
+		return empl;
 	}
 
 	@Override
 	public Employee updateDepartment(long id, String newDepartment) {
 		// TODO Auto-generated method stub
-		return null;
+		Employee empl = employees.get(id);
+		if (empl != null && empl.department() != newDepartment) {
+			removeEmployee(id);
+			Employee newEmpl =
+            new Employee(empl.id(), empl.name(), newDepartment, 
+            		empl.salary(), empl.birthDate());
+			addEmployee(newEmpl);
+				} else {
+					empl= null;
+				}
+		
+		return empl;
 	}
 
 	
