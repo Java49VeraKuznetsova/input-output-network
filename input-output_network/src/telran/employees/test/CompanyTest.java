@@ -149,6 +149,16 @@ class CompanyTest {
 			company.getEmployeesBySalary(1, 3000)
 			.toArray(Employee[]::new));	
 	
+	company.removeEmployee(ID5);
+	assertArrayEquals (expected4,
+			company.getEmployeesBySalary(12000, 50000)
+			.toArray(Employee[]::new));
+	
+	company.addEmployee(empl5);
+	assertArrayEquals (expected3,
+			company.getEmployeesBySalary(12000, 50000)
+			.toArray(Employee[]::new));
+	
 	}
 
 
@@ -169,6 +179,15 @@ void testGetEmployeesByDepartment() {
 			company
 			.getEmployeesByDepartment(DEP1)
 			.toArray(Employee [] :: new));
+	assertArrayEquals (expected3,
+			company
+			.getEmployeesByDepartment(DEP3)
+			.toArray(Employee [] :: new));
+	company.removeEmployee(ID5);
+	assertThrowsExactly (NullPointerException.class,
+			() ->
+			company.getEmployeesByDepartment(DEP3));
+	company.addEmployee(empl5);
 	assertArrayEquals (expected3,
 			company
 			.getEmployeesByDepartment(DEP3)
@@ -197,6 +216,18 @@ void testGetEmployeesByAge() {
 	.toArray(Employee[] :: new));
 	
 		
+	assertArrayEquals(expected3, 
+			company
+			.getEmployeesByAge(0, 20)
+	.toArray(Employee[] :: new));
+	
+	company.removeEmployee(ID5);
+	assertArrayEquals(expected1, 
+			company
+			.getEmployeesByAge(0, 20)
+	.toArray(Employee[] :: new));
+	
+	company.addEmployee(empl5);
 	assertArrayEquals(expected3, 
 			company
 			.getEmployeesByAge(0, 20)
