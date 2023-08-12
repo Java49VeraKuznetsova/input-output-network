@@ -249,6 +249,8 @@ void testUpdateDepartment () {
 	assertThrowsExactly (NullPointerException.class,
 			() ->
 			company.getEmployeesByDepartment(DEP3));
+	company.updateDepartment(ID1, "depart");
+
 }
 
 @Test

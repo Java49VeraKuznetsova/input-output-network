@@ -30,7 +30,7 @@ public class CompanyImpl implements Company {
 	}
 
 	private void addEmployeeDepartment(Employee empl) {
-	// TODO Auto-generated method stub
+	//  Auto-generated method stub
 		String department = empl.department();
 		employeesDepartment
 		.computeIfAbsent(department, k -> new HashSet<>())
@@ -39,7 +39,7 @@ public class CompanyImpl implements Company {
 }
 
 	private void addEmployeeAge(Employee empl) {
-	// TODO Auto-generated method stub
+	//  Auto-generated method stub
 		LocalDate dateBirth = empl.birthDate();
 		int age = getAge(dateBirth);
 		employeesAge
@@ -49,7 +49,7 @@ public class CompanyImpl implements Company {
 }
 
 	private int getAge(LocalDate dateBirth) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		final LocalDate today = LocalDate.now();
 	
 		return Period.between(dateBirth, today).getYears();
@@ -147,7 +147,7 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public List<Employee> getEmployeesByDepartment(String department) {
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 		
 			if (employeesDepartment.get(department) == null) {
 			
@@ -179,7 +179,7 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public List<Employee> getEmployeesByAge(int ageFrom, int ageTo) {
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 		return employeesAge
 				.subMap(ageFrom, true, ageTo, true)
 				.values()
@@ -192,7 +192,7 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public Employee updateSalary(long id, int newSalary) {
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 	
 		Employee empl = employees.get(id);
 		if (empl != null && empl.salary() != newSalary) {
@@ -211,7 +211,7 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public Employee updateDepartment(long id, String newDepartment) {
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 		Employee empl = employees.get(id);
 		if (empl != null && empl.department() != newDepartment) {
 			removeEmployee(id);
