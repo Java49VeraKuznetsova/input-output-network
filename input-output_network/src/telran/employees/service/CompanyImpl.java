@@ -8,60 +8,45 @@ import telran.employees.dto.Employee;
 import telran.employees.dto.SalaryDistribution;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.*;
+
 public class CompanyImpl implements Company {
-  LinkedHashMap<Long, Employee> employees = new LinkedHashMap<>();
+	LinkedHashMap<Long, Employee> employees = new LinkedHashMap<>();
 	TreeMap<Integer, Collection<Employee>> employeesSalary = new TreeMap<>();
-	TreeMap<Integer, Collection<Employee>> employeesAge = new TreeMap<>();
+	TreeMap<LocalDate, Collection<Employee>> employeesAge = new TreeMap<>();
 	HashMap<String, Collection<Employee>> employeesDepartment = new HashMap<>();
-		
-  @Override
+
+	@Override
 	public boolean addEmployee(Employee empl) {
 		boolean res = false;
-	  Employee emplRes = employees.putIfAbsent(empl.id(), empl);
+		Employee emplRes = employees.putIfAbsent(empl.id(), empl);
 		if (emplRes == null) {
 			res = true;
 			addEmployeeSalary(empl);
 			addEmployeeAge(empl);
 			addEmployeeDepartment(empl);
 		}
-	  return res;
+		return res;
 	}
 
-	private void addEmployeeDepartment(Employee empl) {
-	//  Auto-generated method stub
-		String department = empl.department();
-		employeesDepartment
-		.computeIfAbsent(department, k -> new HashSet<>())
-		.add(empl);
-	
-}
-
-	private void addEmployeeAge(Employee empl) {
-	//  Auto-generated method stub
-		LocalDate dateBirth = empl.birthDate();
-		int age = getAge(dateBirth);
-		employeesAge
-		.computeIfAbsent(age, k -> new HashSet<>())
-		.add(empl);
-
-}
-
-	private int getAge(LocalDate dateBirth) {
-		// Auto-generated method stub
-		final LocalDate today = LocalDate.now();
-	
-		return Period.between(dateBirth, today).getYears();
+	private <T> void addToIndex(Employee empl, T key, Map<T, Collection<Employee>> map) {
+		map.computeIfAbsent(key, k -> new HashSet<>()).add(empl);
 	}
 
 	private void addEmployeeSalary(Employee empl) {
-		int salary = empl.salary();
-	employeesSalary
-	.computeIfAbsent(salary, k -> new HashSet<>())
-	.add(empl);
-	
-}
+		addToIndex(empl, empl.salary(), employeesSalary);
+
+	}
+
+	private void addEmployeeAge(Employee empl) {
+		addToIndex(empl, empl.birthDate(), employeesAge);
+
+	}
+
+	private void addEmployeeDepartment(Employee empl) {
+		addToIndex(empl, empl.department(), employeesDepartment);
+
+	}
 
 	@Override
 	public Employee removeEmployee(long id) {
@@ -71,163 +56,113 @@ public class CompanyImpl implements Company {
 			removeEmployeeAge(res);
 			removeEmployeeDepartment(res);
 		}
-		
 		return res;
 	}
 
-	private void removeEmployeeDepartment(Employee empl) {
-		// TODO Auto-generated method stub
-		String department = empl.department();
-		Collection<Employee> employeesCol = 
-				employeesDepartment.get(department);
+	private <T> void removeFromIndex(Employee empl, T key, Map<T, Collection<Employee>> map) {
+
+		Collection<Employee> employeesCol = map.get(key);
 		employeesCol.remove(empl);
 		if (employeesCol.isEmpty()) {
-			employeesDepartment.remove(department);
+			map.remove(key);
 		}
-		
-	}
-
-	private void removeEmployeeAge(Employee empl) {
-		// TODO Auto-generated method stub
-		LocalDate dateBirth = empl.birthDate();
-		int age = getAge(dateBirth);
-		Collection<Employee> employeesCol = 
-				employeesAge.get(age);
-		employeesCol.remove(empl);
-		if(employeesCol.isEmpty()) {
-			employeesAge.remove(age);
-		}
-		
 	}
 
 	private void removeEmployeeSalary(Employee empl) {
 		int salary = empl.salary();
-		Collection<Employee> employeesCol = 
-				employeesSalary.get(salary);
-		employeesCol.remove(empl);
-		if(employeesCol.isEmpty()) {
-			employeesSalary.remove(salary);
-		}
+		removeFromIndex(empl, salary, employeesSalary);
+
+	}
+
+	private void removeEmployeeAge(Employee empl) {
+		removeFromIndex(empl, empl.birthDate(), employeesAge);
+
+	}
+
+	private void removeEmployeeDepartment(Employee empl) {
+		removeFromIndex(empl, empl.department(), employeesDepartment);
+
 	}
 
 	@Override
 	public Employee getEmployee(long id) {
-		
+
 		return employees.get(id);
 	}
 
 	@Override
 	public List<Employee> getEmployees() {
-		
+
 		return new ArrayList<>(employees.values());
 	}
 
 	@Override
 	public List<DepartmentSalary> getDepartmentSalaryDistribution() {
-		
+
 		return employees.values().stream()
-				.collect(Collectors.groupingBy(Employee::department,
-						Collectors.averagingInt(Employee::salary)))
-				.entrySet().stream().map(e -> new DepartmentSalary(e.getKey(),
-						e.getValue())).toList();
+				.collect(Collectors.groupingBy(Employee::department, Collectors.averagingInt(Employee::salary)))
+				.entrySet().stream().map(e -> new DepartmentSalary(e.getKey(), e.getValue())).toList();
 	}
 
 	@Override
 	public List<SalaryDistribution> getSalaryDistribution(int interval) {
-		
+
 		return employees.values().stream()
-				.collect(Collectors.groupingBy(e -> e.salary()/interval,
-						Collectors.counting()))
-				.entrySet().stream()
-				.map(e -> new SalaryDistribution(e.getKey() * interval,
-						e.getKey() * interval + interval - 1, e.getValue().intValue()))
-				.sorted((sd1, sd2) -> Integer.compare(sd1.minSalary(), sd2.minSalary()))
-						.toList();
+				.collect(Collectors.groupingBy(e -> e.salary() / interval, Collectors.counting())).entrySet().stream()
+				.map(e -> new SalaryDistribution(e.getKey() * interval, e.getKey() * interval + interval - 1,
+						e.getValue().intValue()))
+				.sorted((sd1, sd2) -> Integer.compare(sd1.minSalary(), sd2.minSalary())).toList();
 	}
 
 	@Override
 	public List<Employee> getEmployeesByDepartment(String department) {
-		//  Auto-generated method stub
-		
-			if (employeesDepartment.get(department) == null) {
-			
-				throw new NullPointerException("now such department");
-							
-		} 
-		return employeesDepartment
-				.get(department)
-				.stream()
-				.sorted((empl1, empl2) ->
-				Long.compare(empl1.id(), empl2.id()))
-						
-						.toList();
+		Collection<Employee> employeesCol = employeesDepartment.get(department);
+		ArrayList<Employee> res = new ArrayList<>();
+		if (employeesCol != null) {
+			res.addAll(employeesCol);
+		}
+		return res;
 	}
 
 	@Override
 	public List<Employee> getEmployeesBySalary(int salaryFrom, int salaryTo) {
-		
-		return employeesSalary
-				.subMap(salaryFrom, true, salaryTo, true)
-				.values()
-				.stream()
-				.flatMap(col -> col.stream()
-						.sorted((empl1, empl2) ->
-						      Long.compare(empl1.id(), empl2.id())))
-				
+
+		return employeesSalary.subMap(salaryFrom, true, salaryTo, true).values().stream()
+				.flatMap(col -> col.stream().sorted((empl1, empl2) -> Long.compare(empl1.id(), empl2.id())))
+
 				.toList();
 	}
 
 	@Override
 	public List<Employee> getEmployeesByAge(int ageFrom, int ageTo) {
-		//  Auto-generated method stub
-		return employeesAge
-				.subMap(ageFrom, true, ageTo, true)
-				.values()
-				.stream()
+		LocalDate dateTo = LocalDate.now().minusYears(ageFrom);
+		LocalDate dateFrom = LocalDate.now().minusYears(ageTo);
+		return employeesAge.subMap(dateFrom, true, dateTo, true).values().stream()
 				.flatMap(col -> col.stream()
-						.sorted((empl1, empl2) ->
-						    Long.compare(empl1.id(), empl2.id())))
+				.sorted((empl1, empl2) -> Long.compare(empl1.id(), empl2.id())))
 				.toList();
 	}
 
 	@Override
 	public Employee updateSalary(long id, int newSalary) {
-		//  Auto-generated method stub
-	
-		Employee empl = employees.get(id);
-		if (empl != null && empl.salary() != newSalary) {
-			removeEmployee(id);
-			Employee newEmpl =
-            new Employee(empl.id(), empl.name(), empl.department(), 
-            		newSalary, empl.birthDate());
-			addEmployee(newEmpl);
-						
-		} else {
-			empl= null;
+		Employee empl = removeEmployee(id);
+		if(empl != null) {
+			Employee newEmployee = new Employee(id, empl.name(),
+					empl.department(), newSalary, empl.birthDate());
+			addEmployee(newEmployee);
 		}
-
 		return empl;
 	}
 
 	@Override
 	public Employee updateDepartment(long id, String newDepartment) {
-		//  Auto-generated method stub
-		Employee empl = employees.get(id);
-		if (empl != null && empl.department() != newDepartment) {
-			removeEmployee(id);
-			Employee newEmpl =
-            new Employee(empl.id(), empl.name(), newDepartment, 
-            		empl.salary(), empl.birthDate());
-			addEmployee(newEmpl);
-				} else {
-					empl= null;
-				}
-		
+		Employee empl = removeEmployee(id);
+		if(empl != null) {
+			Employee newEmployee = new Employee(id, empl.name(),
+					newDepartment, empl.salary(), empl.birthDate());
+			addEmployee(newEmployee);
+		}
 		return empl;
 	}
-
-	
-
-	
 
 }
