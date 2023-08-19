@@ -29,12 +29,12 @@ public class OperationsAppl {
 	static void callNumbersMenu(InputOutput io) {
 		Menu calculateMenu = new Menu("Number Operations", getItemsCalculate());
 		calculateMenu.perform(io);
-		getItemsCalculate();
+	
 	}
 	static void callDatesMenu(InputOutput io) {
 		Menu datesMenu = new Menu("Date Operations", getItemsDateMenu());
 		datesMenu.perform(io);
-		getItemsDateMenu();
+	
 		
 	}
 	static Item[] getItemsDateMenu() {
