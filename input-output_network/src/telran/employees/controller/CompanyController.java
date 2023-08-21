@@ -78,7 +78,7 @@ static Company company;
 		if(res != null) {
 			io.writeLine(res);  
 		} else {
-			String.format("No employee with id %d ", id);
+			io.writeLine(String.format("No employee with id %d ", id));
 		}
 	}
 	static void getEmployeesItem(InputOutput io) {
@@ -97,14 +97,14 @@ static Company company;
 		company.getSalaryDistribution(interval).forEach(io::writeLine);
 	}
 	static void getEmployeesByDepartmentItem(InputOutput io) {
-		//TODO
+		//
 		
 		String department = io.readString("Enter department", "Wrong department", departments );
 		company.getEmployeesByDepartment(department).forEach(io::writeLine);
 		
 	}
 	static void getEmployeesBySalaryItem(InputOutput io) {
-		//TODO
+		//
 		int salaryFrom = io.readInt("Enter salary from", "Wrong salary", MIN_SALARY, MAX_SALARY);
 		int salaryTo = io.readInt("Enter salary to", "Wrong salary", MIN_SALARY, MAX_SALARY);
 		company.getEmployeesBySalary(salaryFrom, salaryTo).forEach(io::writeLine);
@@ -124,7 +124,7 @@ static Company company;
 			String.format("No employee with id %d ", id));
 	}
 	static void updateDepartmentItem(InputOutput io) {
-		//TODO
+		//
 		String newDepartment = io.readString("Enter new department", "Wrong department", departments);
 		long id = io.readLong("Enter ID", "Wrong ID");
 		Employee empl = company.updateDepartment(id, newDepartment);
