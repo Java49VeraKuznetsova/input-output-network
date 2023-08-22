@@ -63,7 +63,7 @@ static Company company;
 	}
 	static void removeEmployeeItem(InputOutput io) {
 		//
-		long id = io.readLong("Enter ID", "Wrong ID");
+		long id = io.readLong("Enter ID", "Wrong ID", MIN_ID, MAX_ID);
 		Employee res = company.removeEmployee(id);
 		io.writeLine(res != null ? String.format("Employee with id %d has been removed", res.id()) : 
 			String.format("No employee with id %d ", id));
@@ -99,8 +99,11 @@ static Company company;
 	static void getEmployeesByDepartmentItem(InputOutput io) {
 		//
 		
-		String department = io.readString("Enter department", "Wrong department", departments );
-		company.getEmployeesByDepartment(department).forEach(io::writeLine);
+		String department = io
+				.readString("Enter department "+departments.toString(), 
+						"Wrong department", departments );
+		company.getEmployeesByDepartment(department)
+		.forEach(io::writeLine);
 		
 	}
 	static void getEmployeesBySalaryItem(InputOutput io) {
