@@ -62,7 +62,7 @@ static Company company;
 		return LocalDate.now().minusYears(age);
 	}
 	static void removeEmployeeItem(InputOutput io) {
-		//TODO
+		//
 		long id = io.readLong("Enter ID", "Wrong ID");
 		Employee res = company.removeEmployee(id);
 		io.writeLine(res != null ? String.format("Employee with id %d has been removed", res.id()) : 
@@ -71,7 +71,7 @@ static Company company;
 		
 	}
 	static void getEmployeeItem(InputOutput io) {
-		//TODO !!!!!!PRINT
+		//
 		long id = io.readLong("Enter ID", "Wrong ID");
 		Employee res = company.getEmployee(id);
 		
@@ -110,13 +110,13 @@ static Company company;
 		company.getEmployeesBySalary(salaryFrom, salaryTo).forEach(io::writeLine);
 	}
 	static void getEmployeesByAgeItem(InputOutput io) {
-		//TODO
+		//
 		int ageFrom = io.readInt("Enter age from", "Wrong salary", MIN_AGE, MAX_AGE);
 		int ageTo = io.readInt("Enter age to", "Wrong salary", MIN_AGE, MAX_AGE);
 		company.getEmployeesByAge(ageFrom, ageTo).forEach(io::writeLine);
 	}
 	static void updateSalaryItem(InputOutput io) {
-		//TODO ??? CHECK SALARY?
+		//
 		long id = io.readLong("Enter ID", "Wrong ID");
 		int salary = io.readInt("Enter new salary", "Wrong salary");
 		Employee empl = company.updateSalary(id, salary);
