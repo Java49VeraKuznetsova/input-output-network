@@ -11,20 +11,20 @@ public class TcpCalculatorClient {
 
 	
 		private static final String HOST = "localHost";
-		private static final int PORT = 5500;
+		private static final int PORT = 6000;
 		private static final String[] mathAct = {"+", "-", "*", "/"};
 
 		public static void main(String[] args) throws Exception{
-			try (Socket socket = new Socket(HOST, PORT);
-					PrintStream writer = new  PrintStream(socket.getOutputStream());
+			try(Socket socket = new Socket(HOST, PORT);
+					PrintStream writer = new PrintStream(socket.getOutputStream());
 					BufferedReader reader =
 							new BufferedReader(new InputStreamReader(socket.getInputStream()))){
-				    InputOutput io = new ConsoleInputOutput();
-				    Menu menu = new Menu ("TCP client calculator", Item.of("Send request", io1 -> {
+				 InputOutput io = new ConsoleInputOutput();
+				 Menu menu = new Menu("TCP client calculator", Item.of("Send request", io1 -> {
 				    	HashSet<String> requests = new HashSet<>(Arrays.asList(mathAct));
 				    	String requestType = io1.readString("Enter request type " + requests, HOST, requests);
-				    	double operand1 = io1.readDouble("enter first number", "this isn't double a number");
-				    	double operand2 = io1.readDouble("enter second number", "this isn't double a number");
+				    	double operand1 = io1.readDouble("Enter first number", "this isn't double a number");
+				    	double operand2 = io1.readDouble("Enter second number", "this isn't double a number");
 				    	
 				    	writer.println(String.format("%s#%s#%s", requestType, Double.toString(operand1), Double.toString(operand2)));
 				    	try {
@@ -34,13 +34,11 @@ public class TcpCalculatorClient {
 				    		throw new RuntimeException(e.toString());
 				    	}
 				    	
-				    }), Item.ofExit());
+				    }),  Item.ofExit());
 				    menu.perform(io);
 			}
 			
-			
-
-		
+				
 	}
 
 }
