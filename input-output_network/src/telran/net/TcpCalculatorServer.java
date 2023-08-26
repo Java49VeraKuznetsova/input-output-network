@@ -9,11 +9,12 @@ public class TcpCalculatorServer {
 	static final int PORT = 6000;
 
 	public static void main(String[] args) throws Exception{
-		ServerSocket serverSocket = new ServerSocket(PORT);
-		System.out.println("Server is listening to port " + PORT);
-		while(true) {
-			Socket socket = serverSocket.accept();
-			clientRun(socket);
+		try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+			System.out.println("Server is listening to port " + PORT);
+			while(true) {
+				Socket socket = serverSocket.accept();
+				clientRun(socket);
+			}
 		}
 
 	}

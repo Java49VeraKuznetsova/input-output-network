@@ -34,7 +34,7 @@ public class TcpCalculatorClient {
 				    		throw new RuntimeException(e.toString());
 				    	}
 				    	
-				    }),  Item.ofExit());
+				    }), Item.ofExit());
 				    menu.perform(io);
 			}
 			
