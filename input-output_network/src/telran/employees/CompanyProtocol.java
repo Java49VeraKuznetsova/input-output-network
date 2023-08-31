@@ -34,8 +34,8 @@ private Company company;
 			case "department/salary/distribution" -> department_salary_distribution(data);
 			case "salary/distribution" -> salary_distribution(data);
 			case "employees/department" -> employees_department(data);
-			case "employees/salary" -> employees_salary(data);
 			case "employees/age" -> employees_age(data);
+			case "employees/salary" -> employees_salary(data);
 			case "salary/update" -> salary_update(data);
 			default -> 
 			new Response(ResponseCode.WRONG_TYPE, requestType +
