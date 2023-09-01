@@ -1,7 +1,7 @@
 package telran.employees;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 
 import telran.employees.dto.Employee;
 import telran.employees.dto.FromTo;
@@ -65,7 +65,7 @@ private Company company;
 		FromTo fromTo = (FromTo ) data;
 		int ageFrom = fromTo.from();
 		int ageTo = fromTo.to();
-		return new ArrayList<> (company.getEmployeesByAge(ageFrom, ageTo));
+		return (Serializable) (company.getEmployeesByAge(ageFrom, ageTo));
 	}
 
 	private Serializable employees_salary(Serializable data) {
@@ -73,22 +73,22 @@ private Company company;
 		FromTo fromTo = (FromTo ) data;
 		int salaryFrom = fromTo.from();
 		int salaryTo = fromTo.to();
-		return new ArrayList<> (company.getEmployeesBySalary(salaryFrom, salaryTo));
+		return (Serializable) (company.getEmployeesBySalary(salaryFrom, salaryTo));
 	}
 
 	private Serializable employees_department(Serializable data) {
 		String department = (String) data;
-		return new ArrayList<> (company.getEmployeesByDepartment(department));
+		return (Serializable) (company.getEmployeesByDepartment(department));
 	}
 
 	private Serializable salary_distribution(Serializable data) {
 		int interval = (int) data;
-		return new ArrayList<> (company.getSalaryDistribution(interval));
+		return (Serializable) (company.getSalaryDistribution(interval));
 	}
 
 	private Serializable department_salary_distribution(Serializable data) {
 		
-		return new ArrayList<> (company.getDepartmentSalaryDistribution());
+		return (Serializable) (company.getDepartmentSalaryDistribution());
 	}
 
 	private Serializable employee_remove(Serializable data) {
@@ -105,7 +105,7 @@ private Company company;
 	}
 
 	Serializable employees_get(Serializable data) {
-	 return new ArrayList<> (company.getEmployees());
+	 return (Serializable) (company.getEmployees());
 	}
 
 	Serializable employee_add(Serializable data) {
