@@ -15,6 +15,7 @@ public class CompanyServerAppl {
 		fileName = args.length > 0 ? args[0] : DEFAULT_FILE_NAME;
 		Company company = new CompanyImpl();
 		company.restore(fileName );
+	
 		TcpServer tcpServer = new TcpServer(PORT , new CompanyProtocol(company));
 		tcpServer.run();
 
