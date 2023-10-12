@@ -197,23 +197,21 @@ public class CompanyImpl implements Company {
 	@Override
 	public Employee updateSalary(long id, int newSalary) {
 		Employee empl;
-		try {monitor.write().lock();
+		monitor.write().lock();
 			empl = removeEmployee(id);
 			if (empl != null) {
 				Employee newEmployee = new Employee(id, empl.name(), empl.department(), newSalary, empl.birthDate());
 				addEmployee(newEmployee);
 			} 
 			return empl;
-		} finally {
-			monitor.write().unlock();
-		}
+		
 		
 	}
 
 	@Override
 	public Employee updateDepartment(long id, String newDepartment) {
 		Employee empl;
-		try {monitor.write().lock();
+		monitor.write().lock();
 			empl = removeEmployee(id);
 			if (empl != null) {
 				Employee newEmployee = new Employee(id, empl.name(), newDepartment, empl.salary(), empl.birthDate());
@@ -221,9 +219,7 @@ public class CompanyImpl implements Company {
 				
 			} 
 			return empl;
-		} finally {
-			monitor.write().unlock();
-		}
+		
 		
 	}
 
