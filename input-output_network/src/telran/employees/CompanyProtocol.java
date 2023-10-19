@@ -1,7 +1,7 @@
 package telran.employees;
 
 import java.io.Serializable;
-
+import java.lang.reflect.Method;
 
 import telran.employees.dto.Employee;
 import telran.employees.dto.FromTo;
@@ -22,10 +22,19 @@ private Company company;
 	@Override
 	public Response getResponse(Request request) {
 		Response response = null;
-		String requestType = request.requestType();
+		String requestType1 = request.requestType();
+		String requestType = requestType1.replace("/", "_");
 		Serializable data = request.requestData();
+		
+		
 		try {
-			Serializable responseData = switch(requestType) {
+			Class<?> clazz =  this.getClass();
+			Method method = clazz.getDeclaredMethod(requestType, Serializable.class);
+			method.setAccessible(true);
+			System.out.println(method.getName());
+			Serializable responseData = (Serializable) method.invoke(this, data);
+			/*
+			Serializable responseData = switch(requestType1) {
 			case "employee/add" -> employee_add(data);
 			case "employee/get" -> employee_get(data);
 			case "employees/get" -> employees_get(data);
@@ -39,8 +48,9 @@ private Company company;
 			case "salary/update" -> salary_update(data);
 			default -> 
 			new Response(ResponseCode.WRONG_TYPE, requestType +
-					" is unsupported un the Company Protocol");
+					" is unsupported in the Company Protocol");
 			};
+			*/
 			response = (responseData instanceof Response) ?  (Response) responseData :
 				new Response(ResponseCode.OK, responseData);
 		} catch (Exception e) {
