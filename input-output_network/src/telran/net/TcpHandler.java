@@ -39,21 +39,22 @@ public class TcpHandler implements Closeable{
 				@SuppressWarnings("unchecked")
 				T res = (T) response.responseData();
 				return res;
+				
 			} catch (Exception e) {
-                if(e instanceof SocketException) {
-                	running = true;
-                	try {
+				if(e instanceof SocketException) {
+					running = true;
+					try {
 						connect();
-					} catch (Exception  e1) {
-						running = true;
-					
-					}
-                } else {
-				throw new RuntimeException(e.getMessage());
-                }
+					} catch (Exception e1) {
+						
+					} 
+				} else {
+					throw new RuntimeException(e.getMessage());
+				}
+				
 			} 
 		}
-	return null;
+		return null;
 	}
 
 }
