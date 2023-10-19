@@ -31,8 +31,16 @@ private Company company;
 			Class<?> clazz =  this.getClass();
 			Method method = clazz.getDeclaredMethod(requestType, Serializable.class);
 			method.setAccessible(true);
-			System.out.println(method.getName());
-			Serializable responseData = (Serializable) method.invoke(this, data);
+		//	System.out.println(method.getName());
+			Serializable responseData;
+			try {
+				responseData = (Serializable) method.invoke(this, data);
+			} catch (Exception e) {
+				//  Auto-generated catch block
+				//e.printStackTrace();
+				responseData = 	new Response(ResponseCode.WRONG_TYPE, requestType +
+						" is unsupported in the Company Protocol");
+			}
 			/*
 			Serializable responseData = switch(requestType1) {
 			case "employee/add" -> employee_add(data);
@@ -56,7 +64,7 @@ private Company company;
 		} catch (Exception e) {
 			response = new Response(ResponseCode.WRONG_DATA, 
 					e.toString());
-		}
+		} 
 		return response;
 	}
 
