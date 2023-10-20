@@ -31,45 +31,28 @@ private Company company;
 			Class<?> clazz =  this.getClass();
 			Method method = clazz.getDeclaredMethod(requestType, Serializable.class);
 			method.setAccessible(true);
-		//	System.out.println(method.getName());
+	
 			Serializable responseData;
-			try {
-				responseData = (Serializable) method.invoke(this, data);
-			} catch (Exception e) {
-				//  Auto-generated catch block
-				//e.printStackTrace();
-				responseData = 	new Response(ResponseCode.WRONG_TYPE, requestType +
-						" is unsupported in the Company Protocol");
-			}
-			/*
-			Serializable responseData = switch(requestType1) {
-			case "employee/add" -> employee_add(data);
-			case "employee/get" -> employee_get(data);
-			case "employees/get" -> employees_get(data);
-			case "department/update" -> department_update(data);
-			case "employee/remove" -> employee_remove(data);
-			case "department/salary/distribution" -> department_salary_distribution(data);
-			case "salary/distribution" -> salary_distribution(data);
-			case "employees/department" -> employees_department(data);
-			case "employees/age" -> employees_age(data);
-			case "employees/salary" -> employees_salary(data);
-			case "salary/update" -> salary_update(data);
-			default -> 
-			new Response(ResponseCode.WRONG_TYPE, requestType +
-					" is unsupported in the Company Protocol");
-			};
-			*/
+				
+			responseData = (Serializable) method.invoke(this, data);
+		
 			response = (responseData instanceof Response) ?  (Response) responseData :
 				new Response(ResponseCode.OK, responseData);
-		} catch (Exception e) {
+		} catch(NoSuchMethodException e) {
+			response = 	new Response(ResponseCode.WRONG_TYPE, requestType +
+					" is unsupported in the Company Protocol");
+		}
+		catch (Exception e) {
 			response = new Response(ResponseCode.WRONG_DATA, 
 					e.toString());
 		} 
+	
 		return response;
+		
 	}
 
 	 private Serializable salary_update(Serializable data) {
-		// TODO Auto-generated method stub
+		// 
 		 @SuppressWarnings("unchecked")
 		UpdateData<Integer> updateData = (UpdateData<Integer>) data;
 		 long id = updateData.id();
