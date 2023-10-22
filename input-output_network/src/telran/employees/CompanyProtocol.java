@@ -41,8 +41,11 @@ private Company company;
 		}
 		catch (InvocationTargetException e) {
 			Throwable ce = e.getCause();
+			String errorMessage = ce instanceof ClassCastException ? 
+					"Mismatching of received data type" : ce.getMessage();
+			
 			response = new Response(ResponseCode.WRONG_DATA, 
-					ce.toString());
+					errorMessage);
 		
 		} catch (Exception e) {
 			response = new Response(ResponseCode.WRONG_DATA, 
