@@ -1,6 +1,7 @@
 package telran.employees;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import telran.employees.dto.Employee;
@@ -12,6 +13,7 @@ import telran.net.Request;
 import telran.net.Response;
 import telran.net.ResponseCode;
 
+@SuppressWarnings("unused")
 public class CompanyProtocol implements ApplProtocol {
 private Company company;
 
@@ -22,36 +24,37 @@ private Company company;
 	@Override
 	public Response getResponse(Request request) {
 		Response response = null;
-		String requestType1 = request.requestType();
-		String requestType = requestType1.replace("/", "_");
-		Serializable data = request.requestData();
+		String requestType = request.requestType();
+		Serializable data = request.requestType();
 		
 		
-		try {
-			Class<?> clazz =  this.getClass();
-			Method method = clazz.getDeclaredMethod(requestType, Serializable.class);
-			method.setAccessible(true);
 	
-			Serializable responseData;
-				
-			responseData = (Serializable) method.invoke(this, data);
-		
-			response = (responseData instanceof Response) ?  (Response) responseData :
-				new Response(ResponseCode.OK, responseData);
+		try {
+			requestType = requestType.replace('/', '_');
+			Method method = this.getClass().getDeclaredMethod(requestType, Serializable.class);
+		    Serializable responseData = (Serializable) method.invoke(this, data);
+			response = new Response(ResponseCode.OK, responseData);
+		  
 		} catch(NoSuchMethodException e) {
-			response = 	new Response(ResponseCode.WRONG_TYPE, requestType +
+			response = new Response(ResponseCode.WRONG_TYPE, requestType +
 					" is unsupported in the Company Protocol");
 		}
-		catch (Exception e) {
+		catch (InvocationTargetException e) {
+			Throwable ce = e.getCause();
+			response = new Response(ResponseCode.WRONG_DATA, 
+					ce.toString());
+		
+		} catch (Exception e) {
 			response = new Response(ResponseCode.WRONG_DATA, 
 					e.toString());
-		} 
+		}
 	
 		return response;
 		
 	}
 
-	 private Serializable salary_update(Serializable data) {
+	 @SuppressWarnings("unused")
+	private Serializable salary_update(Serializable data) {
 		// 
 		 @SuppressWarnings("unchecked")
 		UpdateData<Integer> updateData = (UpdateData<Integer>) data;
